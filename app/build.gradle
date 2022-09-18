@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -24,15 +26,14 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "IS_PRODUCTION", "true"
             resValue 'string', 'app_name', 'TodoApp'
         }
 
-        dev {
-            initWith debug
+        getByName("debug") {
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             resValue 'string', 'app_name', 'TodoApp - Dev'
@@ -59,7 +60,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation 'androidx.compose.material3:material3:1.0.0-beta01'
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
@@ -73,10 +74,23 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:30.3.2')
-    implementation 'com.google.firebase:firebase-common-ktx:20.1.1'
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation 'com.google.firebase:firebase-common-ktx:20.1.2'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-appcheck-safetynet'
+    implementation 'com.google.firebase:firebase-appcheck'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.43.2"
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    kapt "com.google.dagger:hilt-compiler:2.43.2"
+
+    // Navigation
+    implementation 'androidx.navigation:navigation-compose:2.5.2'
+
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.9'
 }
